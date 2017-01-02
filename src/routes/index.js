@@ -5,6 +5,6 @@ import LoginView from '../views/LoginView'
 
 export default Actions.create(
   <Scene key='root'>
-    <Scene key='login' component={LoginView} />
+    <Scene key='login' component={LoginView} hideNavBar={true}/>
   </Scene>
 )

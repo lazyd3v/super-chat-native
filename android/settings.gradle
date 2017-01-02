@@ -1,0 +1,3 @@
+rootProject.name = 'SuperChat'
+
+include ':app'

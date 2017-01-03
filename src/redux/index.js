@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 
-const testReducer = (state = {}, action) => {
-  return state
-}
+import auth from './authReducer'
 
-const appReducer = combineReducers({ testReducer })
+const appReducer = combineReducers({
+  auth
+})
 
 export default appReducer

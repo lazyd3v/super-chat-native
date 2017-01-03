@@ -1,44 +1,46 @@
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View
-} from 'react-native'
-import {
-  Button
-} from 'react-native-elements'
+import React, { Component, PropTypes } from 'react'
 import Auth0Lock from 'react-native-lock'
+import { connect } from 'react-redux'
 
-export default class SuperChat extends Component {
-  constructor (props) {
-    super(props)
-    this.onLoginClick = this.onLoginClick.bind(this)
+// Actions
+import { processAuth0Response } from '../actions/auth'
+
+class LoginView extends Component {
+  static propTypes = {
+    authenticate: PropTypes.func
   }
 
-  onLoginClick () {
+  static contextTypes = {
+    routes: PropTypes.object.isRequired,
+  }
+
+  componentDidMount () {
+    const { authenticate } = this.props
+
     const lock = new Auth0Lock({
       clientId: 'detKg5ugNQdbnno1V84YS3RPLja9REkT',
       domain: 'superchat.eu.auth0.com'
     })
     lock.show({}, (err, profile, token) => {
-      console.log(err, profile, token)
+      authenticate(err, profile, token)
     })
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <Button title='Perform login' onPress={this.onLoginClick} />
-      </View>
-    );
+    return null
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+function mapStateToProps (state) {
+  return {
+    isLoggedIn: Boolean(state.auth.token)
   }
-})
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    authenticate: (...args) => { dispatch(processAuth0Response(...args)) }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginView)
